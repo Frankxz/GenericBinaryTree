@@ -1,30 +1,17 @@
 package org.labwork.dataModel.binaryTree;
 
-import javax.swing.*;
-import java.util.List;
+import org.labwork.service.Action;
 
 public interface BinaryTreeInterface<T> {
+    int getSize();
+
+    void printTree();
+
     boolean isEmpty();
 
-    int size();
+    void insertElement(Object data);
 
-    int height();
+    boolean deleteElement(int data);
 
-    boolean contains(T data);
-
-    T get(T data);
-
-    void add(T data) throws Exception;
-
-    void remove(T data);
-
-    String toString();
-
-    List<T> inOrder();
-
-    List<T> preOrder();
-
-    List<T> postOrder();
-
-    List<T> levelOrder();
+    void forEach(Action<Object> a);
 }

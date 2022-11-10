@@ -5,11 +5,11 @@ import org.labwork.service.Comparator;
 public interface Builder<T> {
     String typeName();
 
-    T create();
+    Object create();
 
-    Comparator<T> getComparator();
+    Comparator<Object> getComparator();
 
-    T createFromString(String s);
+    Object createFromString(String s);
 
-    String toString(T object);
+    String toString(Object object);
 }

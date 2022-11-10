@@ -1,72 +1,87 @@
 package org.labwork.dataModel.binaryTree;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+public class Node {
+    // PARENT AND CHILDS
+    private Node parent;
+    private Node left;
+    private Node right;
 
-public class Node<T> {
-    private Node<T> parent;
-    private Node<T> leftChild;
-    private Node<T> rightChild;
-    private T data;
+    // STORAGE DATA
+    Object data;
 
-    public Node(T data) {
-        this(null, null, null, data);
+    // BALANCE COEFFICIENTS
+    private int balanceCoeffiecient;
+    static final int LH = 1;
+    static final int EH = 0;
+    static final int RH = -1;
+
+    // NULLARY CONSTRUCTOR
+    public Node(Object data) {
+        this(null,0,null);
     }
 
-    public Node(Node<T> parent, Node<T> leftChild, Node<T> rightChild, T data) {
+    // DEFAULT CONSTRUCTOR
+    public Node(Object data, int bf, Node parent) {
         this.parent = parent;
-        this.leftChild = leftChild;
-        this.rightChild = rightChild;
         this.data = data;
+        this.balanceCoeffiecient = bf;
     }
 
-    public Node<T> getParent() {
+    public Node getParent() {
         return parent;
     }
 
-    public void setParent(Node<T> parent) {
+    public void setParent(Node parent) {
         this.parent = parent;
     }
 
-    public Node<T> getLeftChild() {
-        return leftChild;
+    public Node getLeft() {
+        return left;
     }
 
-    public void setLeftChild(Node<T> leftChild) {
-        this.leftChild = leftChild;
+    public void setLeft(Node left) {
+        this.left = left;
     }
 
-    public Node<T> getRightChild() {
-        return rightChild;
+    public Node getRight() {
+        return right;
     }
 
-    public void setRightChild(Node<T> rightChild) {
-        this.rightChild = rightChild;
+    public void setRight(Node right) {
+        this.right = right;
     }
 
-    public T getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public int getBalanceCoeffiecient() {
+        return balanceCoeffiecient;
+    }
+
+    public void setBalanceCoeffiecient(int balanceCoeffiecient) {
+        this.balanceCoeffiecient = balanceCoeffiecient;
+    }
+
+    public void incrementBalanceCoeffiecient() {
+        this.balanceCoeffiecient++;
+    }
+
+    public void decrementBalanceCoeffiecient() {
+        this.balanceCoeffiecient--;
+    }
+
+    public void setData(Object data) {
         this.data = data;
     }
 
-    public void removeChild(Node<T> child) {
+    public void removeChild(Node child) {
         if (child == null) return;
-        if (this.getRightChild() == child) {
-            this.setRightChild(null);
+        if (this.getRight() == child) {
+            this.setRight(null);
             return;
         }
-        if (this.getLeftChild() == child)
-            this.setLeftChild(null);
-    }
-
-    public Iterator<Node> children() {
-        List<Node> childList = new LinkedList<>();
-        if (this.leftChild != null) childList.add(leftChild);
-        if (this.rightChild != null) childList.add(rightChild);
-        return childList.iterator();
+        if (this.getLeft() == child)
+            this.setLeft(null);
     }
 }
