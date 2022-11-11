@@ -34,11 +34,11 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
         }
     }
 
-    public void insertElement(Object data) {
+    public boolean insertElement(Object data) {
         if (root == null) {
             root = new Node(data, 0, null);
             size++;
-            return;
+            return true;
         }
 
         Node curr = root;
@@ -54,7 +54,7 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
                 curr = curr.getRight();
             } else {
                 // найдено, вставка не удалась
-                return;
+                return false;
             }
         } while (curr != null);
         // Вставить узел
@@ -91,6 +91,7 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
             }
             parent = parent.getParent();
         }
+        return true;
     }
 
     private void fixAfterInsertion(Node parent) {
@@ -278,13 +279,14 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
         }
     }
 
-    public boolean deleteElement(int data) {
+    public boolean deleteElement(Object data) {
         Node currentElement = root;
         Node parentNode = root;
         boolean isLeft = true;
-        while (((Comparable) data).compareTo(currentElement.getData()) < 0) { // начинаем поиск узла
+
+        while  (comparator.compare(data, currentElement.getData()) < 0) { // начинаем поиск узла
             parentNode = currentElement;
-            if (((Comparable) data).compareTo(currentElement.getData()) < 0) { // Определяем, нужно ли движение влево?
+            if (comparator.compare(data, currentElement.getData()) < 0) { // Определяем, нужно ли движение влево?
                 isLeft = true;
                 currentElement = currentElement.getLeft();
             } else { // или движение вправо?
@@ -412,6 +414,10 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
             while (!localStack.isEmpty())
                 globalStack.push(localStack.pop()); // перемещаем все элементы из локального стека в глобальный
         }
+    }
+
+    public void setComparator(Comparator<Object> comparator) {
+        this.comparator = comparator;
     }
 }
 

@@ -9,21 +9,12 @@ import java.util.Vector;
 public abstract class AbstractTreeActionListener implements TreeActionListenerInterface {
     protected final String filename = "file.dat";
 
-    protected final Vector<Object> treeModel = new Vector<>();
+    protected final DefaultListModel<Object> listModel = new DefaultListModel<>(); // for JLIST
+
     protected ObjectBuilder builder;
 
     @Override
-    public Vector <Object> getModel() {
-        return treeModel;
+    public DefaultListModel<Object> getListModel() {
+        return listModel;
     }
-
-    @Override
-    public void onSelectType(String type) {
-        try {
-            builder = ObjectBuilderFactory.getBuilder(type);
-        } catch (Exception ignored) {
-
-        }
-    }
-
 }

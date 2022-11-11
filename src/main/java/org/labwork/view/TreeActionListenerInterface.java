@@ -1,5 +1,6 @@
 package org.labwork.view;
 
+import javax.swing.*;
 import java.util.Vector;
 
 public interface TreeActionListenerInterface {
@@ -13,5 +14,7 @@ public interface TreeActionListenerInterface {
 
     void onSelectType(String type);
 
-    Vector <Object> getModel();
+    void print();
+
+    DefaultListModel<Object> getListModel();
 }

@@ -1,6 +1,7 @@
 package org.labwork.dataModel.binaryTree;
 
 import org.labwork.service.Action;
+import org.labwork.service.Comparator;
 
 public interface BinaryTreeInterface<T> {
     int getSize();
@@ -9,9 +10,11 @@ public interface BinaryTreeInterface<T> {
 
     boolean isEmpty();
 
-    void insertElement(Object data);
+    boolean insertElement(Object data);
 
-    boolean deleteElement(int data);
+    boolean deleteElement(Object data);
 
     void forEach(Action<Object> a);
+
+    void setComparator(Comparator<Object> comparator);
 }

@@ -1,5 +1,6 @@
 package org.labwork.view;
 
+import org.labwork.ObjectBuilderFactory;
 import org.labwork.dataModel.binaryTree.BinaryTree;
 import org.labwork.dataModel.binaryTree.BinaryTreeInterface;
 import org.labwork.service.TreeFileLoader;
@@ -14,14 +15,16 @@ public class TreeActionListener extends AbstractTreeActionListener {
     public void onAdd(String text) {
         if (text.isEmpty()) return;
         Object data = builder.createFromString(text);
-        items.insertElement(data);
-        treeModel.addElement(data);
+        if (items.insertElement(data)) {
+            listModel.addElement(data);
+        }
     }
 
     @Override
     public void onRemove(int index) {
-        items.deleteElement(index);
-        treeModel.remove(index);
+        Object data = listModel.get(index);
+        items.deleteElement(data);
+        listModel.remove(index);
     }
 
     @Override
@@ -38,11 +41,27 @@ public class TreeActionListener extends AbstractTreeActionListener {
     public void onLoad() {
         try {
             items = TreeFileLoader.loadFromFile(filename, builder, new BinaryTree<>(builder.getComparator()));
-            treeModel.clear();
-            items.forEach(treeModel::addElement);
+            listModel.clear();
+            items.forEach(listModel::addElement);
         } catch (Exception e) {
             System.err.println("Unable to read list from a file");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onSelectType(String type) {
+        try {
+            builder = ObjectBuilderFactory.getBuilder(type);
+            items.setComparator(builder.getComparator());
+
+        } catch (Exception ignored) {
+
+        }
+    }
+
+    @Override
+    public void print() {
+        items.printTree();
     }
 }
