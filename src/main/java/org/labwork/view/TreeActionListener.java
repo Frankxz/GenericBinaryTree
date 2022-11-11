@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 
 public class TreeActionListener extends AbstractTreeActionListener {
 
-    protected BinaryTreeInterface<Object> items = new BinaryTree<>(null);
+    protected BinaryTreeInterface items = new BinaryTree<>(null);
 
     @Override
     public void onAdd(String text) {

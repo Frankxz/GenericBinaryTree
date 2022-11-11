@@ -5,11 +5,8 @@ import org.labwork.service.Comparator;
 
 import java.util.*;
 
-import static java.lang.Math.max;
-
-
 //comparator.compare(node.getData(), data) > 0
-public class BinaryTree<T> implements BinaryTreeInterface<T> {
+public class BinaryTree<T> implements BinaryTreeInterface {
     private Node root;
     private int size;
     private Comparator<Object> comparator;
@@ -27,11 +24,7 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
     }
 
     public boolean isEmpty() {
-        if (size <= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return size <= 0;
     }
 
     public boolean insertElement(Object data) {
@@ -42,7 +35,7 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
         }
 
         Node curr = root;
-        Node parent = null;
+        Node parent;
 
         do {
             parent = curr;
@@ -95,25 +88,20 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
     }
 
     private void fixAfterInsertion(Node parent) {
-        // Глубокий уровень поддерева
         if (parent.getBalanceCoeffiecient() == 2) {
             leftBalance(parent);
         }
 
-        // Глубина правого поддерева велика
         if (parent.getBalanceCoeffiecient() == -2) {
             rightBalance(parent);
         }
     }
 
     private void rotateRight(Node parent) {
-        //  System.out.println (" вокруг " + parent.data + " правша ");
+
         if (parent != null) {
             Node left = parent.getLeft();
-
-            // Родительский узел parent назначен родительскому узлу left
             left.setParent(parent.getParent());
-            // правый узел LR как левый узел р
             parent.setLeft(left.getRight());
 
             if (left.getRight() != null) {
@@ -121,165 +109,115 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
             }
 
             if (parent.getParent() == null) {
-                // parent - корневой узел, сбросить корневой узел
                 root = left;
             } else if (parent.getParent().getRight() == parent) {
-                // parent - корневой узел правого поддерева родительского потомка, сбрасываем корневой узел левого поддерева
                 parent.getParent().setRight(left);
             } else {
-                // parent - корневой узел левого поддерева родительского узла, сбрасываем корневой узел левого поддерева
                 parent.getParent().setLeft(left);
             }
 
-            // правое поддерево с parent как left
             left.setRight(parent);
-            // Установить родительский узел parent в left
             parent.setParent(left);
         }
 
     }
 
     private void rotateLeft(Node parent) {
-        //   System.out.println (" вокруг " + parent.data + " левша ");
         if (parent != null) {
             Node right = parent.getRight();
-            // Родительский узел parent назначен родительскому узлу right
             right.setParent(parent.getParent());
-            // левый узел L rR как правый узел р
             parent.setRight(right.getLeft());
 
             if (right.getLeft() != null) {
                 right.getLeft().setParent(parent);
             }
-
             if (parent.getParent() == null)
-                // parent является корневым узлом, right становится родительским узлом, то есть B является родительским узлом
                 root = right;
             else if (parent.getParent().getLeft() == parent)
-                // parent - левый дочерний узел, а левое дочернее дерево родительского узла - right
                 parent.getParent().setLeft(right);
             else
-                // Если parent - правильный дочерний узел
                 parent.getParent().setRight(right);
 
-            // parent - левое поддерево right
             right.setLeft(parent);
-            // Установить родительский узел parent в right
             parent.setParent(right);
         }
 
     }
 
     private void leftBalance(Node temp) {
-        // отметим, изменяется ли высота дерева
-        boolean taller = true;
-
         Node left = temp.getLeft();
         switch (left.getBalanceCoeffiecient()) {
-
-            // левая высота, правая регулировка, высота дерева уменьшается после поворота (левый-левый регистр, см. рисунок)
-            case Node.LH:
+            case Node.LH -> {
                 temp.setBalanceCoeffiecient(Node.EH);
                 left.setBalanceCoeffiecient(Node.EH);
                 rotateRight(temp);
-                break;
-
-            // Высота справа, отрегулированная для каждой ситуации (слева и справа, см. Рисунок)
-            case Node.RH:
+            }
+            case Node.RH -> {
                 Node rd = left.getRight();
-                // Регулируем BF каждого узла
                 switch (rd.getBalanceCoeffiecient()) {
-                    // см. примечание метода case 1
-                    case Node.LH:
+                    case Node.LH -> {
                         temp.setBalanceCoeffiecient(Node.RH);
                         left.setBalanceCoeffiecient(Node.EH);
-                        break;
-
-                    // см. примечание метода case 2
-                    case Node.EH:
+                    }
+                    case Node.EH -> {
                         temp.setBalanceCoeffiecient(Node.EH);
                         left.setBalanceCoeffiecient(Node.EH);
-                        break;
-
-                    // см. примечание метода 3
-                    case Node.RH:
+                    }
+                    case Node.RH -> {
                         temp.setBalanceCoeffiecient(Node.EH);
                         left.setBalanceCoeffiecient(Node.LH);
-                        break;
+                    }
                 }
-
-                // левая, затем правая
                 rd.setBalanceCoeffiecient(Node.EH);
                 rotateLeft(temp.getLeft());
                 rotateRight(temp);
-                break;
-
-            // Особый случай 4, эта ситуация не может возникнуть при добавлении,
-            // возможно только при удалении, общая высота дерева не меняется после поворота
-            // Удалить правого потомка root
-            case Node.EH:
+            }
+            case Node.EH -> {
                 temp.setBalanceCoeffiecient(Node.LH);
                 left.setBalanceCoeffiecient(Node.RH);
                 rotateRight(temp);
-                taller = false;
-                break;
+            }
         }
 
     }
 
     private void rightBalance(Node temp) {
-        // Записать иерархические изменения дерева
-        boolean heightLower = true;
         Node right = temp.getRight();
-
         switch (right.getBalanceCoeffiecient()) {
-            // левый максимум, скорректированный для каждой ситуации (правый и левый случаи)
-            case Node.LH:
+            case Node.LH -> {
                 Node ld = right.getLeft();
-                // Регулируем BF каждого узла
                 switch (ld.getBalanceCoeffiecient()) {
-                    // см. примечание метода case 1
-                    case Node.LH:
+                    case Node.LH -> {
                         temp.setBalanceCoeffiecient(Node.EH);
                         right.setBalanceCoeffiecient(Node.RH);
-                        break;
-
-                    // см. примечание метода case 2
-                    case Node.EH:
+                    }
+                    case Node.EH -> {
                         temp.setBalanceCoeffiecient(Node.EH);
                         right.setBalanceCoeffiecient(Node.EH);
-                        break;
-
-                    // см. примечание метода 3
-                    case Node.RH:
+                    }
+                    case Node.RH -> {
                         temp.setBalanceCoeffiecient(Node.LH);
                         right.setBalanceCoeffiecient(Node.EH);
-                        break;
+                    }
                 }
-
                 ld.setBalanceCoeffiecient(Node.EH);
                 rotateRight(temp.getRight());
                 rotateLeft(temp);
-                break;
-
-            // Высота справа, регулировка слева (справа-справа)
-            case Node.RH:
+            }
+            case Node.RH -> {
                 temp.setBalanceCoeffiecient(Node.EH);
                 right.setBalanceCoeffiecient(Node.EH);
                 rotateLeft(temp);
-                break;
-
-            // Особый случай 4
-            case Node.EH:
+            }
+            case Node.EH -> {
                 right.setBalanceCoeffiecient(Node.LH);
                 temp.setBalanceCoeffiecient(Node.RH);
                 rotateLeft(temp);
-                heightLower = false;
-                break;
+            }
         }
     }
 
-    public boolean deleteElement(Object data) {
+    public void deleteElement(Object data) {
         Node currentElement = root;
         Node parentNode = root;
         boolean isLeft = true;
@@ -294,7 +232,7 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
                 currentElement = currentElement.getRight();
             }
             if (currentElement == null)
-                return false; // yзел не найден
+                return; // yзел не найден
         }
 
         if (currentElement.getLeft() == null && currentElement.getRight() == null) { // узел просто удаляется, если не имеет потомков
@@ -328,7 +266,6 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
                 parentNode.setRight(heir);
         }
         size--;
-        return true; // элемент успешно удалён
     }
 
     private Node receiveHeir(Node elem) {
@@ -352,7 +289,7 @@ public class BinaryTree<T> implements BinaryTreeInterface<T> {
     }
 
     public void printTree() { // метод для вывода дерева в консоль
-        Stack<Node> globalStack = new Stack<Node>(); // общий стек для значений дерева
+        Stack<Node> globalStack = new Stack<>(); // общий стек для значений дерева
         globalStack.push(root);
         int spaceCount = 32; // начальное значение расстояния между элементами
         boolean isRowEmpty = false;

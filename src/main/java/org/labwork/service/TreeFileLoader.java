@@ -10,14 +10,14 @@ import java.io.PrintWriter;
 
 public class TreeFileLoader {
 
-    public static <Object> void saveToFile(String filename, BinaryTreeInterface<Object> list, Builder<Object> builder) throws FileNotFoundException {
+    public static <Object> void saveToFile(String filename, BinaryTreeInterface list, Builder<Object> builder) throws FileNotFoundException {
         try (PrintWriter writer = new PrintWriter(filename)) {
             writer.println(builder.typeName());
-            list.forEach(el -> writer.println(builder.toString(el)));
+            list.forEach(el -> writer.println(builder.toString((Object) el)));
         }
     }
 
-    public static <Object> BinaryTreeInterface<Object> loadFromFile(String filename, Builder<Object> builder, BinaryTreeInterface<Object> tree) throws Exception {
+    public static <Object> BinaryTreeInterface loadFromFile(String filename, Builder<Object> builder, BinaryTreeInterface tree) throws Exception {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
 

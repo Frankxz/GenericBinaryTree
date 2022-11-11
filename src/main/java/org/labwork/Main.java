@@ -21,18 +21,14 @@ public class Main {
         addTestValues(builder, values);
         values.forEach(System.out::println);
 
-        System.out.println("Test values in Tree");
         insertTestValuesInTree(binaryTree, values);
 
-        System.out.println("Size: " + binaryTree.getSize());
         binaryTree.printTree();
-
     }
 
     public static void insertTestValuesInTree(BinaryTree<Object> binaryTree, ArrayList<Object> values) {
         for (Object value : values) {
             binaryTree.insertElement(value);
-            System.out.println(binaryTree.getSize());
         }
     }
 
