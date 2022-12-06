@@ -6,8 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="GenericBinaryTree" />
+        <module name="Java-part-module" />
+        <module name="Scala-part-module" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="GenericBinaryTree" target="15" />
+    </bytecodeTargetLevel>
   </component>
 </project>
