@@ -11,6 +11,7 @@
     <modules>
         <module>Java-part-module</module>
         <module>Scala-part-module</module>
+        <module>Kotlin-part-module</module>
     </modules>
 
     <properties>

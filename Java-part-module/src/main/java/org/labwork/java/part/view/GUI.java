@@ -47,7 +47,7 @@ public class GUI extends JFrame {
             repaint();
         });
 
-        setTitle("Miller Magnushevsky LW # 2 SCALA");
+        setTitle("Miller Magnushevsky LW # 3 SCALA");
         setPreferredSize(new Dimension(520, 220));
         setMaximumSize(new Dimension(520, 220));
         setResizable(false);
