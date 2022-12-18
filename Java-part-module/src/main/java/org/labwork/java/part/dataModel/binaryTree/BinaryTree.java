@@ -23,8 +23,46 @@ public class BinaryTree<T> implements BinaryTreeInterface {
         return size;
     }
 
+    public Node getRoot() { return  root; }
+
     public boolean isEmpty() {
         return size <= 0;
+    }
+
+    public void insertElementWithoutAVLBalancing(Object data) {
+        if (root == null) {
+            root = new Node(data, 0, null);
+            size++;
+            return;
+        }
+
+        Node curr = root;
+        Node parent;
+
+        do {
+            parent = curr;
+            if (comparator.compare(data, curr.data) > 0) {
+                // перейти к левому поддереву
+                curr = curr.getLeft();
+            } else if (comparator.compare(data, curr.data) < 0) {
+                // смотреть на правильное поддерево
+                curr = curr.getRight();
+            } else {
+                // найдено, вставка не удалась
+                return;
+            }
+        } while (curr != null);
+        // Вставить узел
+
+        if (comparator.compare(data, parent.data) > 0) {
+            // Вставляем левого потомка
+            parent.setLeft(new Node(data, Node.EH, parent));
+            size++;
+        } else if (comparator.compare(data, parent.data) < 0) {
+            // вставить правого ребенка
+            parent.setRight(new Node(data, Node.EH, parent));
+            size++;
+        }
     }
 
     public boolean insertElement(Object data) {
